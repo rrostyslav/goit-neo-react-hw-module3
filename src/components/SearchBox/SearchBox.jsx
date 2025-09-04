@@ -8,7 +8,7 @@ export default function SearchBox({ value, onSearch }) {
   return (
     <Input
       value={value}
-      onInput={handleSearch}
+      onChange={handleSearch}
       placeholder="Search"
       label="Find contacts by name"
     />

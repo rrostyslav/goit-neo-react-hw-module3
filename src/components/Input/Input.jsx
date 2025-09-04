@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import css from './Input.module.css';
 
-export default function Input({ value, onInput, placeholder, label, error, name, type = 'text' }) {
+export default function Input({ value, onChange, placeholder, label, error, name, type = 'text' }) {
   const id = useId();
 
   return (
@@ -10,7 +10,7 @@ export default function Input({ value, onInput, placeholder, label, error, name,
       <input
         name={name}
         value={value}
-        onChange={onInput}
+        onChange={onChange}
         placeholder={placeholder}
         type={type}
         id={id}

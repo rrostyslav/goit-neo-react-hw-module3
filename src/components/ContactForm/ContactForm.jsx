@@ -1,22 +1,38 @@
 import css from './ContactForm.module.css';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
-import { Formik } from 'formik';
+import { Formik, Field } from 'formik';
+import { nanoid } from 'nanoid';
 
-export default function ContactForm() {
+export default function ContactForm({ onAddContact }) {
+  const handleAddContact = ({ name, number }) => {
+    const contact = {
+      id: nanoid(),
+      name,
+      number,
+    };
+
+    onAddContact(contact);
+  };
+
   return (
     <div className={css.container}>
       <Formik
-        initialValues={{}}
-        onSubmit={(values) => {
-          console.log(values);
+        initialValues={{
+          name: '',
+          number: '',
         }}
+        onSubmit={handleAddContact}
       >
-        {({ handleChange, handleSubmit }) => (
+        {({ handleSubmit }) => (
           <form onSubmit={handleSubmit}>
-            <Input name="name" label="Name" placeholder="Enter name" onInput={handleChange} />
-            <Input name="number" label="Number" placeholder="Enter number" onInput={handleChange} />
-            <Button>Add contact</Button>
+            <Field name="name">
+              {({ field }) => <Input {...field} label="Name" placeholder="Enter name" />}
+            </Field>
+            <Field name="number">
+              {({ field }) => <Input {...field} label="Number" placeholder="Enter number" />}
+            </Field>
+            <Button type="submit">Add contact</Button>
           </form>
         )}
       </Formik>
