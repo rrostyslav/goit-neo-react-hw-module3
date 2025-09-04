@@ -3,9 +3,10 @@ import Input from '@/components/Input';
 import Button from '@/components/Button';
 import { Formik, Field } from 'formik';
 import { nanoid } from 'nanoid';
+import validationSchema from './validation';
 
 export default function ContactForm({ onAddContact }) {
-  const handleAddContact = ({ name, number }) => {
+  const handleAddContact = ({ name, number }, { resetForm }) => {
     const contact = {
       id: nanoid(),
       name,
@@ -13,29 +14,43 @@ export default function ContactForm({ onAddContact }) {
     };
 
     onAddContact(contact);
+    resetForm();
   };
 
   return (
-    <div className={css.container}>
-      <Formik
-        initialValues={{
-          name: '',
-          number: '',
-        }}
-        onSubmit={handleAddContact}
-      >
-        {({ handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
-            <Field name="name">
-              {({ field }) => <Input {...field} label="Name" placeholder="Enter name" />}
-            </Field>
-            <Field name="number">
-              {({ field }) => <Input {...field} label="Number" placeholder="Enter number" />}
-            </Field>
-            <Button type="submit">Add contact</Button>
-          </form>
-        )}
-      </Formik>
-    </div>
+    <Formik
+      initialValues={{
+        name: '',
+        number: '',
+      }}
+      validationSchema={validationSchema}
+      onSubmit={handleAddContact}
+    >
+      {({ handleSubmit, errors, touched }) => (
+        <form className={css.form} onSubmit={handleSubmit}>
+          <Field name="name">
+            {({ field }) => (
+              <Input
+                {...field}
+                label="Name"
+                placeholder="Enter name"
+                error={touched.name && errors.name ? errors.name : ''}
+              />
+            )}
+          </Field>
+          <Field name="number">
+            {({ field }) => (
+              <Input
+                {...field}
+                label="Number"
+                placeholder="Enter number"
+                error={touched.number && errors.number ? errors.number : ''}
+              />
+            )}
+          </Field>
+          <Button type="submit">Add contact</Button>
+        </form>
+      )}
+    </Formik>
   );
 }
